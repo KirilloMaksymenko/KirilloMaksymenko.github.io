@@ -1,16 +1,37 @@
-.ree{
-    color: red;
+body{
+    margin: 0;
 }
 
-.box{
-
-    background-color: mediumaquamarine;
+.container{
     width: 360px;
     height: 800px;
+    background-color: rgb(214, 214, 214);
 }
-.box{
 
-    background-color: rgb(229, 200, 11);
-    width: 1080px;
-    height: 1920px;
+.titre_container{}
+
+.block_products{
+    display: flex;
 }
+.product_div{
+    width: 60px;
+    height: 60px;
+    background-color: rgb(65, 65, 65);
+    border-radius: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
