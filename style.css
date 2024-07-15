@@ -1,9 +1,12 @@
 body{
     margin: 0;
 }
+html{
+    background-color: blue;
+}
 
 .container{
-    width: 380px;
+    width: 381px;
     height: 800px;
     background-color: rgb(214, 214, 214);
 }
