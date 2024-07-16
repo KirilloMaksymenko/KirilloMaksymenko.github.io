@@ -12,8 +12,8 @@ html{
 .content{
     margin: 10px auto;
     width: 360px;
-    border-color: blueviolet;
-    border-style: dotted;
+  /*  border-color: blueviolet;
+    border-style: dotted;*/
 }
 .titre_container{
     color: var(--tg-theme-text-color);
@@ -37,7 +37,7 @@ html{
     margin:10px 15px;
     text-align: center;
 }
-.product_div.p{
+.title-product{
     color: var(--tg-theme-text-color);
 }
 
