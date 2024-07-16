@@ -1,0 +1,401 @@
+.Top_app_bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 4px;
+  width: 380px;
+  height: 64px;
+
+}
+.Top_app_bar .leadingicon {
+  display: flex;
+  flex-direction: column;
+  width: 48px;
+  height: 48px;
+  margin-right: 4px;
+}
+.Top_app_bar .leadingicon .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+}
+.Top_app_bar .leadingicon .container .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 8px;
+  width: 40px;
+  height: 40px;
+}
+.Top_app_bar .leadingicon .container .statelayer .icon {
+  width: 24px;
+  height: 24px;
+}
+.Top_app_bar .leadingicon .container .statelayer .icon .icon {
+  width: 16px;
+  height: 16px;
+}
+.Top_app_bar .headline {
+  color: #1d1b20;
+  font-family: Roboto;
+  font-size: 22px;
+  font-weight: normal;
+  line-height: 28px;
+  margin-right: 4px;
+}
+.Top_app_bar .trailingicon {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 48px;
+  height: 48px;
+}
+.Top_app_bar .trailingicon .trailingicon_3 {
+  display: flex;
+  flex-direction: column;
+  width: 48px;
+  height: 48px;
+}
+.Top_app_bar .trailingicon .trailingicon_3 .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+}
+.Top_app_bar .trailingicon .trailingicon_3 .container .icon {
+  width: 4px;
+  height: 16px;
+}
+.Filter_chips_carousel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 8px;
+  width: 380px;
+  height: 48px;
+
+}
+.Filter_chips_carousel .Filter_chip_01 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 67px;
+  height: 32px;
+  border: 1px solid #79747e;
+  border-radius: 8px;
+  margin-right: 4px;
+}
+.Filter_chips_carousel .Filter_chip_01 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 6px 16px;
+  width: 67px;
+  height: 32px;
+}
+.Filter_chips_carousel .Filter_chip_01 .statelayer .labeltext {
+  color: #49454f;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: medium;
+  text-align: center;
+  line-height: 20px;
+}
+.Filter_chips_carousel .Filter_chip_02 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 85px;
+  height: 32px;
+  background: #e8def8;
+  border-radius: 8px;
+  margin-right: 4px;
+}
+.Filter_chips_carousel .Filter_chip_02 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 6px 8px;
+  width: 85px;
+  height: 32px;
+}
+.Filter_chips_carousel .Filter_chip_02 .statelayer .Selected_icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+.Filter_chips_carousel .Filter_chip_02 .statelayer .Selected_icon .icon {
+  width: 12px;
+  height: 9px;
+}
+.Filter_chips_carousel .Filter_chip_02 .statelayer .labeltext {
+  color: #1d192b;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: medium;
+  text-align: center;
+  line-height: 20px;
+}
+.Filter_chips_carousel .Filter_chip_03 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 67px;
+  height: 32px;
+  border: 1px solid #79747e;
+  border-radius: 8px;
+  margin-right: 4px;
+}
+.Filter_chips_carousel .Filter_chip_03 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 6px 16px;
+  width: 67px;
+  height: 32px;
+}
+.Filter_chip_04 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 67px;
+  height: 32px;
+  border: 1px solid #79747e;
+  border-radius: 8px;
+  margin-right: 4px;
+}
+.Filter_chip_04 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 6px 16px;
+  width: 67px;
+  height: 32px;
+}
+.Filter_chip_05 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 67px;
+  height: 32px;
+  border: 1px solid #79747e;
+  border-radius: 8px;
+}
+.Filter_chip_05 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 6px 16px;
+  width: 67px;
+  height: 32px;
+}
+.Sorting_controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 16px;
+  width: 380px;
+  height: 72px;
+
+}
+.Sorting_controls .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px 0;
+  width: 356px;
+  height: 56px;
+}
+.Sorting_controls .container .Button_1 {
+  display: flex;
+  flex-direction: column;
+  width: 89px;
+  height: 40px;
+  border-radius: 100px;
+  margin-right: 144px;
+}
+.Sorting_controls .container .Button_1 .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 12px;
+  width: 89px;
+  height: 40px;
+}
+.Sorting_controls .container .Button_1 .statelayer .icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+.Sorting_controls .container .Button_1 .statelayer .icon .icon {
+  width: 12px;
+  height: 15px;
+}
+.Sorting_controls .container .Button_1 .statelayer .labeltext {
+  color: #65558f;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: medium;
+  text-align: center;
+  line-height: 20px;
+}
+.Sorting_controls .container .Button_2 {
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  height: 40px;
+}
+.Sorting_controls .container .Button_2 .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+}
+.Sorting_controls .container .Button_2 .container .icon {
+  width: 18px;
+  height: 10px;
+}
+.Card_grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 16px;
+  width: 380px;
+  height: 1152px;
+}
+.Card_grid .Card {
+  display: flex;
+  flex-direction: column;
+  width: 168px;
+  height: 180px;
+  margin-right: 8px;
+}
+.Card_grid .Card .Image {
+  width: 140px;
+  height: 120px;
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+.Card_grid .Card .Content {
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  height: 36px;
+}
+.Card_grid .Card .Content .Title {
+  color: #1d1b20;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: medium;
+  line-height: 20px;
+}
+.Card_grid .Card .Content .Date {
+  color: #49454f;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 16px;
+}
+
+.Navigation_bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 8px;
+  width: 380px;
+  height: 80px;
+  background: #f3edf7;
+}
+.Navigation_bar .Nav_item_1 {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  width: 116px;
+  height: 80px;
+  margin-right: 8px;
+}
+.Navigation_bar .Nav_item_1 .iconcontainer {
+  display: flex;
+  flex-direction: column;
+  width: 64px;
+  height: 32px;
+  background: #e8def8;
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+.Navigation_bar .Nav_item_1 .iconcontainer .statelayer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 4px 20px;
+  width: 64px;
+  height: 32px;
+}
+.Navigation_bar .Nav_item_1 .iconcontainer .statelayer .icon {
+  width: 20px;
+  height: 20px;
+}
+.Navigation_bar .labeltext {
+  color: #1d1b20;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 16px;
+}
+.Nav_item_2 {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  width: 116px;
+  height: 80px;
+  margin-right: 8px;
+}
+.Nav_item_2 .iconcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+.labeltext {
+  color: #49454f;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: medium;
+  text-align: center;
+  line-height: 16px;
+}
+.Nav_item_3 {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  width: 116px;
+  height: 80px;
+}
+.Nav_item_3 .iconcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  margin-bottom: 4px;
+}
+.labeltext {
+  color: #49454f;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: medium;
+  text-align: center;
+  line-height: 16px;
+}
