@@ -31,6 +31,9 @@ body {
     display: flex;
     flex-direction: row;
     padding: 8px;
+    width: 100%;
+    overflow: hidden;
+    
 }
 .filter-item {
     display: flex;
@@ -42,8 +45,9 @@ body {
     border-radius: 14px;
     justify-content: center;
     align-items: center;
-    margin: 0 4px
+    margin: 0 4px;
 }
+
 .filter-item .title {
     color: rgb(73, 69, 79);
     font-size: 14px;
