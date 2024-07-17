@@ -9,6 +9,34 @@
   </head>
 
   <body>
+
+    <div class="card-block" id="card-block" hidden>
+      <div class="headline-block">
+        <img src="/icons/arrow.svg" alt="" class="icon-back" onclick="hide()">
+        <div class="title-block">
+          <p class="title">Title</p>
+          <p class="discription">Discription</p>
+        </div>
+      </div>
+      <div class="image-conatiner">
+        <img src="/icons/image.png" alt="">
+      </div>
+      <div class="main-content">
+        <div class="title-content">
+          <p class="name">Name</p>
+          <p class="subinfo">info</p>
+        </div>
+        <div class="information-content">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.ezze rzerzerz erzerze rzerzezefe zefzef zef zef zefzerzerze ezeréré"ré"ré"ré"ré"ré" eé "é é""fé" zefzef ze</p>
+        </div>
+        <div class="action-content">
+          <button class="btn-buy">Buy</button>
+          <button class="btn-like">img</button>
+        </div>
+      </div>
+    </div>
+
+
     <div class="container">
       <div class="headline-block">
         <img src="/icons/arrow.svg" alt="" class="icon-back">
@@ -44,11 +72,11 @@
           <p class="title">Label</p>
         </div>
         <div class="format-change">
-          <img src="/icons/list.svg" alt="" class="icon" onclick="orderStyle()">
+          <img src="/icons/list.svg" alt="" class="icon" id="img-format" onclick="orderStyle()">
         </div>
       </div>
       <div class="products-list-block " id="order-list">
-        <div class="product-item">
+        <div class="product-item" onclick="show()">
           <img src="/icons/image.png" alt="" class="image">
           <div class="text_block">
             <p class="title">Label</p>
@@ -56,7 +84,7 @@
           </div>
           
         </div>
-        <div class="product-item">
+        <div class="product-item" onclick="show()">
           <img src="/icons/image.png" alt="" class="image">
           <div class="text_block">
             <p class="title">Label</p>
@@ -64,7 +92,7 @@
           </div>
           
         </div>
-        <div class="product-item">
+        <div class="product-item" onclick="show()">
           <img src="/icons/image.png" alt="" class="image">
           <div class="text_block">
             <p class="title">Label</p>
@@ -72,7 +100,7 @@
           </div>
           
         </div>
-        <div class="product-item">
+        <div class="product-item" onclick="show()">
           <img src="/icons/image.png" alt="" class="image">
           <div class="text_block">
             <p class="title">Label</p>
@@ -80,7 +108,7 @@
           </div>
           
         </div>
-        <div class="product-item">
+        <div class="product-item" onclick="show()">
           <img src="/icons/image.png" alt="" class="image">
           <div class="text_block">
             <p class="title">Label</p>
