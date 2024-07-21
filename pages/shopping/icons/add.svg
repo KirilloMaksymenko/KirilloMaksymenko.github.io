@@ -1,0 +1,10 @@
+<svg width="30.000000" height="30.000000" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs/>
+	<rect id="add" rx="7.500000" width="29.000000" height="29.000000" transform="translate(0.500000 0.500000)" fill="#EEF1F4" fill-opacity="1.000000"/>
+	<rect id="add_icon" rx="-0.500000" width="12.000000" height="12.000000" transform="translate(9.000000 9.000000)" fill="#FFFFFF" fill-opacity="0"/>
+	<path id="Vector" d="M9.58 16.08L20.41 16.08C21.01 16.08 21.5 15.59 21.5 15C21.5 14.4 21.01 13.91 20.41 13.91L9.58 13.91C8.98 13.91 8.5 14.4 8.5 15C8.5 15.59 8.98 16.08 9.58 16.08Z" fill="#393F48" fill-opacity="1.000000" fill-rule="evenodd"/>
+	<path id="Vector" d="M16.08 20.41L16.08 9.58C16.08 8.98 15.59 8.5 15 8.5C14.4 8.5 13.91 8.98 13.91 9.58L13.91 20.41C13.91 21.01 14.4 21.5 15 21.5C15.59 21.5 16.08 21.01 16.08 20.41Z" fill="#393F48" fill-opacity="1.000000" fill-rule="evenodd"/>
+</svg>
