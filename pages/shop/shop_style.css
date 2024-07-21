@@ -74,14 +74,14 @@ body{
     gap: 16px;
 }
 .product-cart {
-    width: 152px;
-    height: 233px;
+    width: calc((100% - 16px)/2);
+    height: calc(((100% - 16px)/2)*1.28);
 
 }
 
 .product-img {
-    width: 152px;
-    height: 152px;
+    width: 100%;
+    width: 100%;
     display: flex;
     background: rgb(255, 255, 255);
     border-radius: 18px;
