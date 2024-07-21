@@ -72,14 +72,14 @@ body{
     gap: 16px;
 }
 .product-cart {
-    width: 142px;
+    width: 140px;
     height: 233px;
 
 }
 
 .product-img {
-    width: 142px;
-    height: 142px;
+    width: 140px;
+    height: 140px;
     display: flex;
     background: rgb(255, 255, 255);
     border-radius: 18px;
