@@ -1,0 +1,108 @@
+body{
+    font-family: "Mulish";
+    font-weight: 400;
+    margin: 0;
+}
+
+.product-container {
+    margin-top: 85px;
+    height: calc(100% - 85px);
+    width: calc(100% - 64px);
+    padding: 0 32px;
+    background-color: #F8F8F8;
+    border-radius: 100px;
+}
+
+.img-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top:-100px;
+    width: 350px;
+    margin: 0 auto;
+}
+.main-img {
+    
+    width: 350px;
+    margin: 0 16px;
+    z-index: 1;
+}
+.frame-decorative {
+    position: absolute;
+    bottom: 20px;
+    z-index: 0;
+    width: 380px;
+}
+.liked-item{
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 24px;
+    background: rgb(238, 241, 244);
+    z-index: 2;
+}
+.liked-item img{
+    width: 20px;
+}
+.info-block {
+    margin-top: -100px;
+}
+.title {
+    color: rgb(57, 63, 72);
+    font-family: "Roboto";
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28px;
+    text-align: left;
+    text-transform: uppercase;
+}
+.discription {
+
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 18px;
+    text-align: left;
+}
+.options {
+    margin: 0 30px;
+}
+.option-item {
+}
+.option-item .title{
+    color: rgb(14, 21, 20);
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 18px;
+    text-align: left;
+}
+.items-block {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.item {
+    display: flex;
+    width: 60px;
+    height: 30px;
+
+    box-sizing: border-box;
+    border: 1px solid rgb(102, 112, 128);
+    border-radius: 39.31px;
+    align-items: center;
+    justify-content:center;
+    
+    
+}
+.non-stock{
+    border: 1px solid rgb(195, 198, 201);
+    color:rgb(195, 198, 201);
+}
+.item p{
+    margin: 0;
+}

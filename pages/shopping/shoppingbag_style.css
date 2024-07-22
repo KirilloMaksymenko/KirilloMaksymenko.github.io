@@ -64,15 +64,18 @@
 }
 .liked-item{
     position: absolute;
-    top: 5px;
-    right: 5px;
+    bottom: -15px;
+    right: -15px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 25px;
-    height: 25px;
+    width: 45px;
+    height: 45px;
     border-radius: 24px;
     background: rgb(238, 241, 244);
+}
+.liked-item img{
+    width: 20px;
 }
 
 .add-item {
