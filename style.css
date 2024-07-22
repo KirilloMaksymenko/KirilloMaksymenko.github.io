@@ -3,3 +3,58 @@ body{
     font-family: "Mulish";
     font-weight: 400;
 }
+
+
+
+.price-block {
+    position: fixed;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+
+    bottom: 0;
+    width: calc(100% - 50px);
+    height: 130px;
+    border-radius: 30px 30px 0 0;
+    background: rgb(102, 112, 128);
+    
+    padding: 0 25px;
+}
+.price-info {
+}
+.title-price {
+    color: rgb(238, 241, 244);
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 17px;
+    text-align: left;
+    margin-bottom: 8px;
+}
+.text-price {
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 23px;
+    text-align: left;
+}
+.price-btn {
+    display: flex;
+    width: 195px;
+    height: 62px;
+    border-radius: 30px;
+    background: rgb(57, 63, 72);
+    align-items: center;
+    justify-content: center;
+}
+
+.price-btn p{
+    color: rgb(255, 255, 255);
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+    text-align: left;
+    text-transform: uppercase;
+}

@@ -10,7 +10,7 @@ body{
     width: calc(100% - 64px);
     padding: 0 32px;
     background-color: #F8F8F8;
-    border-radius: 100px;
+    border-radius: 50px;
 }
 
 .img-block {
@@ -74,7 +74,7 @@ body{
 }
 .option-item {
 }
-.option-item .title{
+.title-item{
     color: rgb(14, 21, 20);
     font-size: 14px;
     font-weight: 200;
