@@ -1,23 +1,23 @@
-// function inlineSVG(imgElement, color) {
-//     var imgClass = imgElement.width
-//     var imgURL = imgElement.src;
+function inlineSVG(imgElement, color) {
+    var imgClass = imgElement.width
+    var imgURL = imgElement.src;
     
-//     console.log(imgClass)
+    console.log(imgClass)
 
-//     fetch(imgURL)
-//         .then(response => response.text())
-//         .then(svgText => {
-//             var parser = new DOMParser();
-//             var svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-//             var svgElement = svgDoc.querySelector('svg');
+    fetch(imgURL)
+        .then(response => response.text())
+        .then(svgText => {
+            var parser = new DOMParser();
+            var svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            var svgElement = svgDoc.querySelector('svg');
             
             
-//             svgElement.style.fill = color;
-//             svgElement.width = imgClass
-//             imgElement.parentNode.replaceChild(svgElement, imgElement);
-//         })
-//         .catch(error => console.error('Error fetching SVG:', error));
-// }
+            svgElement.style.fill = color;
+            svgElement.width = imgClass
+            imgElement.parentNode.replaceChild(svgElement, imgElement);
+        })
+        .catch(error => console.error('Error fetching SVG:', error));
+}
 
 
 // document.addEventListener('DOMContentLoaded', function() {
@@ -37,6 +37,8 @@
 var state = "catalog"
 $( "#head" ).load( "/pages/shop/shop_screen.html #head");
 $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
+$( ".footer-item" ).removeClass( "select-footer" );
+$( "#footerCatalog" ).addClass( "select-footer" );
 
 
 
@@ -48,6 +50,9 @@ $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
 
 $( "#catalog" ).on( "click", function() {
     if(state != "catalog"){
+        $( ".footer-item" ).removeClass( "select-footer" );
+        $( "#footerCatalog" ).addClass( "select-footer" );
+
         $( "#head" ).empty();
         $( "#includedContent" ).empty();
         $( "#head" ).load( "/pages/shop/shop_screen.html #head");
@@ -62,6 +67,8 @@ $( "#catalog" ).on( "click", function() {
 
 $( "#favorite" ).on( "click", function() {
     if(state != "favorite"){
+        $( ".footer-item" ).removeClass( "select-footer" );
+        $( "#footerFavorite" ).addClass( "select-footer" );
         $( "#head" ).empty();
         $( "#includedContent" ).empty();
         $( "#head" ).load( "/pages/wishlist/wishlisy_screen.html #head");
@@ -74,6 +81,8 @@ $( "#favorite" ).on( "click", function() {
 
 $( "#bag" ).on( "click", function() {
     if(state != "bag"){
+        $( ".footer-item" ).removeClass( "select-footer" );
+        $( "#footerBag" ).addClass( "select-footer" );
         $( "#head" ).empty();
         $( "#includedContent" ).empty();
         $( "#head" ).load( "/pages/shopping/shoppingbag_screen.html #head");

@@ -87,8 +87,28 @@ body{
     border-radius: 50px;
     background: rgb(255, 255, 255);
 }
-.nav-item {
+.footer-item {
+    display: flex;
     padding: 15px;
+    flex-direction: column;
 }
-.nav-img {
+.footer-img {
+    width: 25px;
+}
+.slider-item{
+    
+    border-radius: 100px;
+    background: none;
+    width: 8px;
+    height: 2px;
+    margin: 0 auto;
+    margin-top: 8px;
+}
+
+.select-footer img{
+    
+    filter: invert(46%) sepia(10%) saturate(648%) hue-rotate(178deg) brightness(91%) contrast(90%);
+}
+.select-footer div{
+    background: rgb(102, 112, 128);
 }
