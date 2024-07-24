@@ -3,27 +3,33 @@
     <meta charset="utf-8">
 
     <title>Shop</title>
-    <link rel="stylesheet" href="shop_style.css">
-    <link rel="stylesheet" href="/style.css">
+    <div id="head">
+        <link rel="stylesheet" href="pages/shop/shop_style.css">
+        <script src="/pages/shop/shop_script.js"></script>
+    </div>
+    
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 
   </head>
   <body>
-    <div class="shop-container">
+    
+    <div id="container" class="shop-container">
         <div class="shop-search-block">
             <div class="search-bar">
-                <div class="img-bar"></div>
+                
+                <input class="img-bar" type="search" name="Search" id="" placeholder="Search">
                 <div class="placeholder-bar">
-                    <img class="img-search" src="icons/search_icon.svg" alt="">
-                    <p class="search-text">Search</p>
+                    <img class="img-search" src="/pages/shop/icons/search_icon.svg" alt="">
+                    
                 </div>
                 
             </div>
         </div>
         <div class="shop-nav-block">
             <p class="nav-text">Popular</p>
-            <img src="icons/icon_menu.svg" alt="" class="nav-img">
+            <img src="/pages/shop/icons/icon_menu.svg" alt="" class="nav-img">
         </div>
         <div class="products-block">
             <div class="product-cart">
@@ -92,5 +98,6 @@
 
 
   </body>
-  <script src="shop_script.js"></script>
+  
+  
 </html>

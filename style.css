@@ -88,6 +88,7 @@ body{
     background: rgb(255, 255, 255);
 }
 .nav-item {
+    padding: 15px;
 }
 .nav-img {
 }

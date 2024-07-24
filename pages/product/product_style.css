@@ -41,11 +41,12 @@ body{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    width: 25px;
+    height: 25px;
     border-radius: 24px;
     background: rgb(238, 241, 244);
     z-index: 2;
+    align-items: center;
 }
 .liked-item img{
     width: 20px;
