@@ -34,17 +34,15 @@ function inlineSVG(imgElement, color) {
 //     alert( "Load was performed." );
 //   });
 
+
+
 var state = "catalog"
-$( "#head" ).load( "/pages/shop/shop_screen.html #head");
-$( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
-$( ".footer-item" ).removeClass( "select-footer" );
-$( "#footerCatalog" ).addClass( "select-footer" );
-
-
-
-
-
-
+$( "#head" ).load( "/pages/product/product_screen.html #head");
+$( "#includeProduct" ).load( "/pages/product/product_screen.html #container");
+// $( "#head" ).load( "/pages/shop/shop_screen.html #head");
+// $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
+// $( ".footer-item" ).removeClass( "select-footer" );
+// $( "#footerCatalog" ).addClass( "select-footer" );
 
 
 
@@ -93,3 +91,81 @@ $( "#bag" ).on( "click", function() {
   } );
 
 
+function initSlidePanel(){
+    document.addEventListener('touchend', endTouch, false);   
+    document.addEventListener('touchstart', startTouch, false);         
+    document.addEventListener('touchmove', handleTouchMove, false);
+
+    const productCont = document.getElementById('includeProduct')
+    productCont.style.transition = 'transform .1s';
+                                                            
+    var yDown = null;
+    var initY =null
+    var sectionScreen = null
+    var yDiff = null
+
+    function startTouch(e) {
+        yDown = e.touches[0].clientY;
+        initY = getTranslateY(productCont)  
+        
+
+    };     
+    function endTouch(e) {
+        
+        sectionScreen = (($( window ).height()/Math.abs(initY-yDiff))*10)
+        console.log("end " +sectionScreen)
+        if (sectionScreen < 20){
+            productCont.style.transform = `translateY(${$( window ).height()}px)`; 
+        }
+        yDown = null
+    };  
+    function getTranslateY(element) {
+        const style = window.getComputedStyle(element);
+        const transform = style.transform;
+        if (transform === 'none') {
+            return 0;
+        }
+        const matrix = transform.match(/^matrix\((.+)\)$/);
+        if (matrix) {
+            const values = matrix[1].split(', ');
+            return parseFloat(values[5]);
+        }
+        
+        const translateY = transform.match(/translateY\(([^)]+)\)/);
+        if (translateY) {
+            return parseFloat(translateY[1]);
+        }
+        
+        const translate = transform.match(/translate\(([^)]+)\)/);
+        if (translate) {
+            const values = translate[1].split(', ');
+            return parseFloat(values[1] || 0);
+        }
+        return 0;
+    }                                        
+
+ 
+
+    function handleTouchMove(evt) {
+        if (! yDown ) {
+            return;
+        }                                   
+        var yUp = evt.touches[0].clientY;
+        yDiff = yDown - yUp;
+        
+        var cord = initY-yDiff
+        if(cord > 0){
+            if ( yDiff > 0 ) {
+                productCont.style.transform = `translateY(${cord}px)`;
+                
+            } else {  
+                productCont.style.transform = `translateY(${cord}px)`;   
+            } 
+        }
+                                                    
+    };
+}
+
+
+
+initSlidePanel()
