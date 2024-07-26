@@ -89,12 +89,38 @@ $( "#bag" ).on( "click", function() {
         state = "bag"
     }
   } );
+  
+function detectMob() {
+    const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ];
+
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+}
 
 
 function initSlidePanel(){
-    document.addEventListener('touchend', endTouch, false);   
-    document.addEventListener('touchstart', startTouch, false);         
-    document.addEventListener('touchmove', handleTouchMove, false);
+    if (detectMob()){
+        document.addEventListener('touchend', endTouch, false);   
+        document.addEventListener('touchstart', startTouch, false); 
+        document.addEventListener('touchmove', handleTouchMove, false);
+    }else{
+        document.addEventListener('mouseup', endTouch, false);   
+        document.addEventListener('mousedown', startTouch, false); 
+        document.addEventListener('mousemove', handleTouchMove, false);  
+    }
+    
+
+          
+    
 
     const productCont = document.getElementById('includeProduct')
     productCont.style.transition = 'transform .1s';
@@ -104,11 +130,18 @@ function initSlidePanel(){
     var sectionScreen = null
     var yDiff = null
 
-    function startTouch(e) {
-        yDown = e.touches[0].clientY;
-        initY = getTranslateY(productCont)  
-        
+    function touchDetect(e){
+        if (detectMob()){
+            return e.touches[0].clientY;
+        }else{
+            return e.clientY;
+        }
+    }
 
+    function startTouch(e) {
+
+        yDown = touchDetect(e);      
+        initY = getTranslateY(productCont)  
     };     
     function endTouch(e) {
         
@@ -149,8 +182,9 @@ function initSlidePanel(){
     function handleTouchMove(evt) {
         if (! yDown ) {
             return;
-        }                                   
-        var yUp = evt.touches[0].clientY;
+        } 
+                                         
+        var yUp = touchDetect(evt);
         yDiff = yDown - yUp;
         
         var cord = initY-yDiff
