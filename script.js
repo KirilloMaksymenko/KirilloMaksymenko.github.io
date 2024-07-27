@@ -198,7 +198,7 @@ function initSlidePanel(){
             yDiff = yDown - yUp;
             
             var cord = initY-yDiff
-            if(cord > 0){
+            if(cord > ($( window ).height()-$( "#includeProduct" ).height())){
                 if ( yDiff > 0 ) {
                     productCont.style.transform = `translateY(${cord}px)`;
                     
