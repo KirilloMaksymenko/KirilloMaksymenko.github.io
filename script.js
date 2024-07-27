@@ -20,75 +20,66 @@ function inlineSVG(imgElement, color) {
 }
 
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     var imgElement = document.getElementById('likedIcon');
-//     var newColor = 'red';
-//     // inlineSVG(imgElement, newColor);
-
-
+function initPage(){
     
-// });
+    var state = "catalog"
 
+    const listHead = ["/pages/shopping/shoppingbag_screen.html #head", "/pages/product/product_screen.html #head", "/pages/wishlist/wishlisy_screen.html #head", "/pages/shop/shop_screen.html #head"]
 
-// $( "#includedContent" ).load( "pages/shop/shop_screen.html", function() {
-//     alert( "Load was performed." );
-//   });
-
-
-
-var state = "catalog"
-$( "#head" ).load( "/pages/product/product_screen.html #head");
-$( "#includeProduct" ).load( "/pages/product/product_screen.html #container");
-// $( "#head" ).load( "/pages/shop/shop_screen.html #head");
-// $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
-// $( ".footer-item" ).removeClass( "select-footer" );
-// $( "#footerCatalog" ).addClass( "select-footer" );
-
-
-
-$( "#catalog" ).on( "click", function() {
-    if(state != "catalog"){
-        $( ".footer-item" ).removeClass( "select-footer" );
-        $( "#footerCatalog" ).addClass( "select-footer" );
-
-        $( "#head" ).empty();
-        $( "#includedContent" ).empty();
-        $( "#head" ).load( "/pages/shop/shop_screen.html #head");
-        $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
-        
-        state = "catalog"
+    for (let index = 0; index < listHead.length; index++) {
+        var $el = $("<div>").load(listHead[index])
+        $( "#head-main" ).append($el);
     }
-    
-});
 
 
 
-$( "#favorite" ).on( "click", function() {
-    if(state != "favorite"){
-        $( ".footer-item" ).removeClass( "select-footer" );
-        $( "#footerFavorite" ).addClass( "select-footer" );
-        $( "#head" ).empty();
-        $( "#includedContent" ).empty();
-        $( "#head" ).load( "/pages/wishlist/wishlisy_screen.html #head");
-        $( "#includedContent" ).load( "/pages/wishlist/wishlisy_screen.html #container");
+    $( "#includeProduct" ).load( "/pages/product/product_screen.html #container");
+
+
+    $( "#footerCatalog" ).on( "click", function() {
+        if(state != "catalog"){
+            $( ".footer-item" ).removeClass( "select-footer" );
+            $( "#footerCatalog" ).addClass( "select-footer" );
+
+            $( "#includedContent" ).empty();
+
+            $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
+            
+            state = "catalog"
+        }
         
-        state = "favorite"
-    }
+    });
+
+
+
+    $( "#footerFavorite" ).on( "click", function() {
+        if(state != "favorite"){
+            $( ".footer-item" ).removeClass( "select-footer" );
+            $( "#footerFavorite" ).addClass( "select-footer" );
+
+            $( "#includedContent" ).empty();
+
+            $( "#includedContent" ).load( "/pages/wishlist/wishlisy_screen.html #container");
+            
+            state = "favorite"
+        }
+    } );
+
+
+    $( "#footerBag" ).on( "click", function() {
+        if(state != "bag"){
+            $( ".footer-item" ).removeClass( "select-footer" );
+            $( "#footerBag" ).addClass( "select-footer" );
+
+            $( "#includedContent" ).empty();
+            
+            $( "#includedContent" ).load( "/pages/shopping/shoppingbag_screen.html #container");
+            
+            state = "bag"
+        }
   } );
+}
 
-
-$( "#bag" ).on( "click", function() {
-    if(state != "bag"){
-        $( ".footer-item" ).removeClass( "select-footer" );
-        $( "#footerBag" ).addClass( "select-footer" );
-        $( "#head" ).empty();
-        $( "#includedContent" ).empty();
-        $( "#head" ).load( "/pages/shopping/shoppingbag_screen.html #head");
-        $( "#includedContent" ).load( "/pages/shopping/shoppingbag_screen.html #container");
-        
-        state = "bag"
-    }
-  } );
   
 function detectMob() {
     const toMatch = [
@@ -108,6 +99,7 @@ function detectMob() {
 
 
 function initSlidePanel(){
+
     if (detectMob()){
         document.addEventListener('touchend', endTouch, false);   
         document.addEventListener('touchstart', startTouch, false); 
@@ -116,19 +108,36 @@ function initSlidePanel(){
         document.addEventListener('mouseup', endTouch, false);   
         document.addEventListener('mousedown', startTouch, false); 
         document.addEventListener('mousemove', handleTouchMove, false);  
-    }
-    
+    }  
 
-          
-    
+
+
 
     const productCont = document.getElementById('includeProduct')
     productCont.style.transition = 'transform .1s';
-                                                            
+    productCont.style.transform = `translateY(${$( window ).height()}px)`;
+    
+    
+    var isHide = true
     var yDown = null;
     var initY =null
     var sectionScreen = null
     var yDiff = null
+
+
+    $(document.body).on('click', '#productLink' ,function(){  
+        console.log("Open Product")
+        openProduct("")
+        
+    });
+
+    function openProduct(data){
+        isHide = false
+
+        $( "#includedContent" ).addClass( "hide-content" );
+        productCont.style.transform = `translateY(${0}px)`;
+    }  
+
 
     function touchDetect(e){
         if (detectMob()){
@@ -148,7 +157,9 @@ function initSlidePanel(){
         sectionScreen = (($( window ).height()/Math.abs(initY-yDiff))*10)
         console.log("end " +sectionScreen)
         if (sectionScreen < 20){
-            productCont.style.transform = `translateY(${$( window ).height()}px)`; 
+            productCont.style.transform = `translateY(${$( window ).height()}px)`;
+            isHide = true 
+            $( "#includedContent" ).removeClass( "hide-content" );
         }
         yDown = null
     };  
@@ -177,29 +188,36 @@ function initSlidePanel(){
         return 0;
     }                                        
 
- 
-
     function handleTouchMove(evt) {
-        if (! yDown ) {
-            return;
-        } 
-                                         
-        var yUp = touchDetect(evt);
-        yDiff = yDown - yUp;
-        
-        var cord = initY-yDiff
-        if(cord > 0){
-            if ( yDiff > 0 ) {
-                productCont.style.transform = `translateY(${cord}px)`;
-                
-            } else {  
-                productCont.style.transform = `translateY(${cord}px)`;   
+        if (!isHide){
+            if (! yDown ) {
+                return;
             } 
-        }
-                                                    
+                                                
+            var yUp = touchDetect(evt);
+            yDiff = yDown - yUp;
+            
+            var cord = initY-yDiff
+            if(cord > 0){
+                if ( yDiff > 0 ) {
+                    productCont.style.transform = `translateY(${cord}px)`;
+                    
+                } else {  
+                    productCont.style.transform = `translateY(${cord}px)`;   
+                } 
+            }
+        }                                                
     };
+    
 }
 
 
 
+
+
+initPage()
 initSlidePanel()
+
+
+
+
