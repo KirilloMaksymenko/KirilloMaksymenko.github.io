@@ -4,7 +4,7 @@ body{
     font-weight: 400;
     margin: 0;
     margin-bottom: 100px;
-    overflow-y: hidden;
+    
 }
 
 #includeProduct{
@@ -24,6 +24,9 @@ body{
 }
 .hide-content{
     filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+
 }
 
 
