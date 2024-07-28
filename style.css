@@ -21,6 +21,7 @@ body{
 
 #includedContent{
     z-index: 2;
+    margin-bottom: 100px;
 }
 .hide-content{
     filter: blur(6px);
