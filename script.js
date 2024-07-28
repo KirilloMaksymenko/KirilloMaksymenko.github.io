@@ -162,7 +162,7 @@ function initSlidePanel(){
         
         sectionScreen = (($( window ).height()/Math.abs(initY-yDiff))*10)
         console.log("end " +sectionScreen)
-        if (sectionScreen < 20 && ($( "#includeProduct" ).height()-$( window ).height()) > 0){
+        if (sectionScreen < 40 && initY >0){
             productCont.style.transform = `translateY(${$( window ).height()}px)`;
             isHide = true 
             $( "#includedContent" ).removeClass( "hide-content" );
@@ -205,7 +205,7 @@ function initSlidePanel(){
             yDiff = yDown - yUp;
             
             var cord = initY-yDiff
-            var maxCord = ($( "#includeProduct" ).height()-($( window ).height()))
+            var maxCord = ($( ".product-container" ).height()-($( window ).height()))
             
             if(maxCord>0){
                 maxCord = 0
