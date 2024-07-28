@@ -62,7 +62,7 @@
     margin: 0 8px;
     margin-bottom: 10px;
 }
-.liked-item{
+.liked-item-bag{
     position: absolute;
     bottom: 5px;
     right: 5px;
@@ -75,7 +75,7 @@
     background: rgb(238, 241, 244);
     align-items: center;
 }
-.liked-item img{
+.liked-item-bag img{
     width: 20px;
 }
 

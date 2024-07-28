@@ -34,6 +34,7 @@ function initPage(){
 
 
     $( "#includeProduct" ).load( "/pages/product/product_screen.html #container");
+    $( "#includedContent" ).load( "/pages/shop/shop_screen.html #container");
 
 
     $( "#footerCatalog" ).on( "click", function() {
@@ -131,10 +132,15 @@ function initSlidePanel(){
         
     });
 
+
+ 
+
     function openProduct(data){
         isHide = false
 
         $( "#includedContent" ).addClass( "hide-content" );
+        $('body').css("overflow","hidden")
+
         productCont.style.transform = `translateY(${0}px)`;
     }  
 
@@ -160,6 +166,7 @@ function initSlidePanel(){
             productCont.style.transform = `translateY(${$( window ).height()}px)`;
             isHide = true 
             $( "#includedContent" ).removeClass( "hide-content" );
+            $('body').css("overflow","visible")
         }
         yDown = null
     };  
@@ -198,7 +205,11 @@ function initSlidePanel(){
             yDiff = yDown - yUp;
             
             var cord = initY-yDiff
-            if(cord > ($( window ).height()-$( "#includeProduct" ).height())){
+            var maxCord = ($( window ).height()-$( "#includeProduct" ).height())
+            if(maxCord>0){
+                maxCord = 0
+            }
+            if(cord >  maxCord){
                 if ( yDiff > 0 ) {
                     productCont.style.transform = `translateY(${cord}px)`;
                     

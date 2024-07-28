@@ -116,6 +116,7 @@ body{
 }
 .footer-img {
     width: 25px;
+    filter: brightness(0) saturate(100%) invert(79%) sepia(7%) saturate(273%) hue-rotate(182deg) brightness(103%) contrast(92%);
 }
 .slider-item{
     
