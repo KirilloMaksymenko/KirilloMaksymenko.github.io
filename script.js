@@ -162,7 +162,7 @@ function initSlidePanel(){
         
         sectionScreen = (($( window ).height()/Math.abs(initY-yDiff))*10)
         console.log("end " +sectionScreen)
-        if (sectionScreen < 20){
+        if (sectionScreen < 20 && ($( "#includeProduct" ).height()-$( window ).height()) > 0){
             productCont.style.transform = `translateY(${$( window ).height()}px)`;
             isHide = true 
             $( "#includedContent" ).removeClass( "hide-content" );
