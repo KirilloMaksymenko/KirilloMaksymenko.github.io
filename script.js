@@ -205,8 +205,9 @@ function initSlidePanel(){
             yDiff = yDown - yUp;
             
             var cord = initY-yDiff
-            var maxCord = -($("#includeProduct").children("#container" ).height()-($( window ).height()))
-            $("#debug").text($("#includeProduct").children("#container" ).height()+" - "+($( window ).height()) +" = "+ maxCord + " / " + initY)
+            var maxCord = -($("#includeProduct").children("#container" ).height()-(window.innerHeight))
+            $("#debug").text($("#includeProduct").children("#container" ).height()+" - "+(window.innerHeight) +" = "+ maxCord + " / " + initY)
+            console.log($("#includeProduct").children("#container" ).height()+" - "+(window.innerHeight) +" = "+ maxCord + " / " + initY)
             if(maxCord>0){
                 maxCord = 0
             }
