@@ -211,7 +211,7 @@ function initSlidePanel(){
             if(maxCord>0){
                 maxCord = 0
             }
-            if(cord >  maxCord){
+            if(cord >  -(window.innerHeight)){
                 if ( yDiff > 0 ) {
                     productCont.style.transform = `translateY(${cord}px)`;
                     
