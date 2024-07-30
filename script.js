@@ -166,8 +166,8 @@ function initSlidePanel(){
     }
 
     function endScroll(cord) {
-        sectionScreen = (($( window ).height()/Math.abs(cord))*10)
-        if (sectionScreen < 40 && initY >0){
+        sectionScreen = (($( window ).height()/Math.abs(getTranslateY(productCont) ))*10)
+        if (sectionScreen < 30 && initY >0){
             productCont.style.transform = `translateY(${$( window ).height()}px)`;
             isHide = true 
             $( "#includedContent" ).removeClass( "hide-content" );
