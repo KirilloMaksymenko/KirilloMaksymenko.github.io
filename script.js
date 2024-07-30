@@ -109,10 +109,10 @@ function initSlidePanel(){
         document.addEventListener('mouseup', endTouch, false);   
         document.addEventListener('mousedown', startTouch, false); 
         document.addEventListener('mousemove', handleTouchMove, false);  
+        document.addEventListener('wheel', wheelScroll, false);
     }  
 
-
-
+    
 
     const productCont = document.getElementById('includeProduct')
     productCont.style.transition = 'transform .1s';
@@ -132,7 +132,6 @@ function initSlidePanel(){
         
     });
 
-
  
 
     function openProduct(data){
@@ -140,10 +139,43 @@ function initSlidePanel(){
 
         $( "#includedContent" ).addClass( "hide-content" );
         $('body').css("overflow","hidden")
+        
+        
 
         productCont.style.transform = `translateY(${0}px)`;
     }  
 
+
+    function wheelScroll(e) {
+        if(!isHide){
+            initY = getTranslateY(productCont) 
+
+            var maxCord = ((window.innerHeight)-$("#includeProduct").children("#container" ).height()-150)
+            var cord = initY+e.deltaY/5
+
+            if(maxCord>0){
+                maxCord = 0
+            }
+            if(cord>maxCord){
+                
+                productCont.style.transform = `translateY(${cord}px)`;
+            }
+            endScroll(cord)
+        }
+        
+    }
+
+    function endScroll(cord) {
+        sectionScreen = (($( window ).height()/Math.abs(cord))*10)
+        if (sectionScreen < 40 && initY >0){
+            productCont.style.transform = `translateY(${$( window ).height()}px)`;
+            isHide = true 
+            $( "#includedContent" ).removeClass( "hide-content" );
+            $('body').css("overflow","visible")
+
+            
+        }
+    }
 
     function touchDetect(e){
         if (detectMob()){
@@ -167,6 +199,8 @@ function initSlidePanel(){
             isHide = true 
             $( "#includedContent" ).removeClass( "hide-content" );
             $('body').css("overflow","visible")
+
+            
         }
         yDown = null
     };  
