@@ -1,32 +1,47 @@
 body{
     margin: 0;
+    font-family: "Roboto";
 }
 
 .container{
     display: flex;
     flex-direction: column;
-
-    border-radius: 24px;
-    border:2px solid black;
     width: 100%;
     height: 100%;
 }
 .img-block img{
 width: 100%;
+margin-bottom: -20px;
 }
 .info-block{
-    border-radius: 24px;
+    border-radius: 16px;
     background-color: #fff;
 }
 .title{
-
+    font-size: 18px;
+    margin: 0 15px;
+    color: rgb(89, 89, 89);
 }
 .discription{
-
+    
+    margin: 0 15px;
+    margin-top: 2em;
+    color: rgb(153, 153, 153);
 }
 .option{
-
+    margin: 0 15px;
 }
 .action{
+    margin-top: 3em;
+    display: flex;
+    justify-content: center;
+}
+.action button{
 
+    width: 6em;
+    height: 3em;
+    background: rgb(153, 153, 153);
+    border-radius: 40px;
+    border: none;
+    color: #fff;
 }
