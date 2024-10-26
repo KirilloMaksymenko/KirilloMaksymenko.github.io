@@ -1,6 +1,7 @@
 body{
     margin: 0;
     font-family: "Roboto";
+    background-color: #fff;
 }
 
 .container{
@@ -34,11 +35,13 @@ margin-bottom: -20px;
 .action{
     position: absolute;
     bottom: 3em;
-    left: 15px;
+    
     
 }
+
 .action button{
-    
+    position: relative;
+    left: 15px;
     width: 6em;
     height: 3em;
     background: rgb(153, 153, 153);
