@@ -1,0 +1,139 @@
+body{
+    font-family: "Roboto";
+    margin: 0;
+}
+.container{
+    margin:42px 40px;
+}
+
+
+.title-info {
+    font-size: 18px;
+    color: #595959;
+    margin: 0;
+}
+.title {
+    font-size: 15px;
+    color: #999999;
+    margin: 0;
+}
+.enter-number {
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    background-color: #D9D9D9;
+    color: #fff;
+    font-size: 26px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    padding: 0;
+}
+
+.line{
+    margin-top: 14px;
+    display: flex;
+    flex-direction: row;
+}
+
+.payment-info {
+    margin-bottom: 23px;
+}
+.cart-info {
+    display: flex;
+    flex-direction: column;
+}
+.numeber {
+}
+.cart-number {
+    width: 320px;
+}
+.data-info {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+.month-info {
+}
+.data-number {
+    width: 60px;
+}
+.slash-data {
+    width: 8px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: #D9D9D9;
+    transform: rotate(30deg);
+    margin: 0 11px;
+}
+.year-info {
+}
+.cv-info {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+.cv-number {
+    width: 80px;
+}
+.cv-img {
+    margin-left: 11px;
+}
+.name-info {
+    display: flex;
+    flex-direction: row;
+}
+.firstname-info {
+    margin-right: 20px;
+}
+.name-number {
+    width: 150px;
+}
+.lastname-info {
+}
+
+
+
+
+.address-info {
+    display: flex;
+    flex-direction: column;
+}
+.place-info {
+    display: flex;
+    flex-direction: row;
+}
+.country-info {
+    margin-right: 20px;
+}
+.country-number {
+    width: 150px;
+}
+.city-info {
+}
+.city-number {
+    width: 150px;
+}
+.codepostal-info {
+    margin-right: 20px;
+}
+.codepostal-number {
+    width: 150px;
+}
+.addresses-info{
+}
+.addresses-number{
+    width: 320px;
+}
+.option-info {
+}
+.option-number {
+    width: 150px;
+}
+.btn-action{
+    background-color: #D9D9D9;
+    padding: 10px 20px;
+    border-radius: 40px;
+    color: #fff;
+}
