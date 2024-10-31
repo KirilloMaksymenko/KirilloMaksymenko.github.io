@@ -15,25 +15,29 @@
                 <div class="line">
                     <div class="numeber">
                         <p class="title">Cart numero</p>
-                        <input type="text" class="enter-number cart-number">
+                        <div class="cart-custom">
+                            <label for="cartnumber" id="cartnumberlabel"></label>
+                            <input type="text" class="enter-number cart-number" maxlength="16" name="cartnumber" id="cartnumber">
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="line">
                     <div class="data-info">
                         <div class="month-info">
                             <p class="title">Month</p>
-                            <input type="text" class="enter-number data-number">
+                            <input type="text" class="enter-number data-number" id="numinput" maxlength="2">
                         </div>
                         <div class="slash-data"></div>
                         <div class="year-info">
                             <p class="title">Year</p>
-                            <input type="text" class="enter-number data-number">
+                            <input type="text" class="enter-number data-number" id="numinput" maxlength="2">
                         </div>
                     </div>
                     <div class="cv-info">
                         <div class="cv-text">
                             <p class="title">CV</p>
-                        <input type="text" class="enter-number cv-number">
+                        <input type="text" class="enter-number cv-number" id="numinput" maxlength="3">
                         </div>
                         <img class="cv-img" src="source/cart _example.svg" alt="">
                     </div>
@@ -58,7 +62,7 @@
                 <div class="place-info">
                     <div class="country-info">
                         <p class="title">Country</p>
-                        <input type="text" class="enter-number country-number">
+                        <input type="text"  class="enter-number country-number">
                     </div>
                     <div class="city-info">
                         <p class="title">City</p>
