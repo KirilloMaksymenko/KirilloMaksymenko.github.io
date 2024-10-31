@@ -46,8 +46,27 @@ body{
 }
 .numeber {
 }
+.cart-custom{
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .cart-number {
     width: 320px;
+    color: rgba(0, 0, 0, 0);
+}
+#cartnumberlabel{
+    height: 29px;
+    position: absolute;
+    display: block;
+    text-align: center;
+
+    color:#fff;
+    font-size: 26px;
+    cursor: pointer;
+    user-select: none;
 }
 .data-info {
     margin-right: 20px;
@@ -90,6 +109,7 @@ body{
 }
 .name-number {
     width: 150px;
+    font-size: 20px;
 }
 .lastname-info {
 }
