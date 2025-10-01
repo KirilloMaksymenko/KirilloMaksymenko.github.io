@@ -1,8 +1,8 @@
-// Основна JavaScript логіка для Fitness Competition Mini App
+// Оновлений JavaScript для Mini App з API інтеграцією
 
 class FitnessApp {
     constructor() {
-        this.tg = window.Telegram.WebApp;
+        this.tg = window.Telegram?.WebApp;
         this.currentTab = 'home';
         this.isTracking = false;
         this.activeCompetition = null;
@@ -12,35 +12,65 @@ class FitnessApp {
             currentRank: 'bronze',
             totalPoints: 0
         };
+        this.apiBase = window.location.origin + '/api';
+        this.watchId = null;
 
         this.init();
     }
 
     init() {
         // Ініціалізація Telegram Mini App
-        this.tg.ready();
-        this.tg.expand();
-
-        // Налаштування теми
-        this.setupTheme();
+        if (this.tg) {
+            this.tg.ready();
+            this.tg.expand();
+            this.tg.enableClosingConfirmation();
+            this.setupTheme();
+        }
 
         // Налаштування обробників подій
         this.setupEventListeners();
 
-        // Завантаження даних користувача
+        // Завантаження даних користувача з API
         this.loadUserData();
 
-        console.log('🚀 Fitness App ініціалізовано');
+        console.log('🚀 Fitness App ініціалізовано з API інтеграцією');
     }
 
     setupTheme() {
-        // Використання кольорів теми Telegram
         const root = document.documentElement;
 
-        if (this.tg.themeParams) {
+        if (this.tg?.themeParams) {
             root.style.setProperty('--tg-theme-bg-color', this.tg.themeParams.bg_color || '#ffffff');
             root.style.setProperty('--tg-theme-text-color', this.tg.themeParams.text_color || '#000000');
             root.style.setProperty('--tg-theme-button-color', this.tg.themeParams.button_color || '#0088cc');
+        }
+    }
+
+    getAuthHeaders() {
+        // Отримуємо initData для автентифікації
+        const initData = this.tg?.initData || '';
+        return {
+            'Authorization': `tma ${initData}`,
+            'Content-Type': 'application/json'
+        };
+    }
+
+    async apiRequest(endpoint, options = {}) {
+        const url = `${this.apiBase}${endpoint}`;
+        const config = {
+            headers: this.getAuthHeaders(),
+            ...options
+        };
+
+        try {
+            const response = await fetch(url, config);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error(`API request failed: ${error}`);
+            throw error;
         }
     }
 
@@ -88,12 +118,12 @@ class FitnessApp {
             content.classList.remove('active');
         });
 
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-        document.getElementById(tabName).classList.add('active');
+        document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
+        document.getElementById(tabName)?.classList.add('active');
 
         this.currentTab = tabName;
 
-        // Оновлення контенту залежно від вкладки
+        // Завантаження даних залежно від вкладки
         if (tabName === 'rankings') {
             this.loadRankings();
         } else if (tabName === 'competitions') {
@@ -104,6 +134,137 @@ class FitnessApp {
                     window.mapInstance.invalidateSize();
                 }
             }, 100);
+        }
+    }
+
+    async loadUserData() {
+        try {
+            const stats = await this.apiRequest('/user/stats');
+            this.userStats = {
+                totalDistance: stats.total_distance,
+                totalSteps: stats.total_steps,
+                currentRank: stats.rank_level,
+                totalPoints: stats.total_points,
+                rankPosition: stats.rank_position
+            };
+
+            this.updateStatsDisplay();
+        } catch (error) {
+            console.error('Помилка завантаження даних користувача:', error);
+            this.showNotification('Помилка', 'Не вдалося завантажити дані користувача');
+        }
+    }
+
+    updateStatsDisplay() {
+        const elements = {
+            'total-distance': `${this.userStats.totalDistance.toFixed(1)} км`,
+            'total-steps': this.userStats.totalSteps.toLocaleString(),
+            'total-points': this.userStats.totalPoints.toLocaleString()
+        };
+
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        });
+
+        const rankEmojis = {
+            bronze: '🥉',
+            silver: '🥈', 
+            gold: '🥇',
+            platinum: '💎',
+            diamond: '👑'
+        };
+
+        const rankElement = document.getElementById('current-rank');
+        if (rankElement) {
+            rankElement.textContent = rankEmojis[this.userStats.currentRank] || '🥉';
+        }
+
+        // Оновлення позиції в рейтингу
+        const positionElements = document.querySelectorAll('.rank-position');
+        positionElements.forEach(el => {
+            if (this.userStats.rankPosition) {
+                el.textContent = `#${this.userStats.rankPosition}`;
+            }
+        });
+    }
+
+    async loadRankings() {
+        const leaderboard = document.getElementById('leaderboard');
+        if (!leaderboard) return;
+
+        try {
+            const rankings = await this.apiRequest('/leaderboard?limit=10');
+
+            leaderboard.innerHTML = rankings.map(leader => `
+                <div class="leader-item">
+                    <div class="leader-rank">#${leader.rank}</div>
+                    <div class="leader-info">
+                        <div class="leader-name">${leader.name}</div>
+                        <div class="leader-details">${leader.level} Активний гравець</div>
+                    </div>
+                    <div class="leader-points">${leader.points} очок</div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error('Помилка завантаження рейтингу:', error);
+            leaderboard.innerHTML = '<p>Помилка завантаження рейтингу</p>';
+        }
+    }
+
+    async loadCompetitions() {
+        try {
+            const competitions = await this.apiRequest('/competitions');
+
+            // Оновлення інформації про активні змагання
+            if (competitions.length > 0) {
+                console.log(`Завантажено ${competitions.length} змагань`);
+            }
+
+        } catch (error) {
+            console.error('Помилка завантаження змагань:', error);
+        }
+    }
+
+    filterRankings(filter) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+        }
+
+        // Завантаження рейтингу з фільтром
+        const groupId = filter === 'group' ? this.tg?.initDataUnsafe?.chat?.id : null;
+        this.loadRankingsWithFilter(groupId);
+    }
+
+    async loadRankingsWithFilter(groupId = null) {
+        const leaderboard = document.getElementById('leaderboard');
+        if (!leaderboard) return;
+
+        try {
+            const endpoint = groupId ? `/leaderboard?group_id=${groupId}&limit=10` : '/leaderboard?limit=10';
+            const rankings = await this.apiRequest(endpoint);
+
+            leaderboard.innerHTML = rankings.map(leader => `
+                <div class="leader-item">
+                    <div class="leader-rank">#${leader.rank}</div>
+                    <div class="leader-info">
+                        <div class="leader-name">${leader.name}</div>
+                        <div class="leader-details">${leader.level} Активний гравець</div>
+                    </div>
+                    <div class="leader-points">${leader.points} очок</div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            console.error('Помилка завантаження рейтингу:', error);
         }
     }
 
@@ -145,152 +306,80 @@ class FitnessApp {
         this.showNotification('Відстеження зупинено', '⏹️ GPS відстеження деактивовано.');
     }
 
-    handleLocationUpdate(position) {
-        const { latitude, longitude, speed } = position.coords;
+    async handleLocationUpdate(position) {
+        const { latitude, longitude, speed, accuracy } = position.coords;
 
         // Оновлення карти
         if (window.updateMapLocation) {
             window.updateMapLocation(latitude, longitude);
         }
 
-        // Оновлення швидкості
+        // Оновлення швидкості в UI
         const speedKmh = speed ? (speed * 3.6).toFixed(1) : '0';
         const speedElement = document.getElementById('current-speed');
         if (speedElement) {
             speedElement.textContent = `${speedKmh} км/год`;
         }
 
-        // Надсилання даних до бота
-        this.sendLocationToBot(latitude, longitude);
-
-        console.log(`📍 Локація оновлена: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
-    }
-
-    sendLocationToBot(latitude, longitude) {
-        // Надсилання даних через Telegram Mini App API
-        const locationData = {
-            latitude,
-            longitude,
-            timestamp: Date.now(),
-            user_id: this.tg.initDataUnsafe.user?.id
-        };
-
-        // Відправка даних до бота
-        this.tg.sendData(JSON.stringify({
-            type: 'location_update',
-            data: locationData
-        }));
-    }
-
-    loadUserData() {
-        // Симуляція завантаження даних користувача
-        setTimeout(() => {
-            this.userStats = {
-                totalDistance: 12.5,
-                totalSteps: 8420,
-                currentRank: 'silver',
-                totalPoints: 245
+        // Відправка локації до API
+        try {
+            const locationData = {
+                latitude,
+                longitude,
+                timestamp: Date.now(),
+                accuracy
             };
 
-            this.updateStatsDisplay();
-        }, 1000);
-    }
+            const response = await this.apiRequest('/location', {
+                method: 'POST',
+                body: JSON.stringify(locationData)
+            });
 
-    updateStatsDisplay() {
-        const elements = {
-            'total-distance': `${this.userStats.totalDistance} км`,
-            'total-steps': this.userStats.totalSteps.toLocaleString(),
-            'total-points': this.userStats.totalPoints
-        };
+            if (response.success) {
+                // Оновлюємо статистику
+                await this.loadUserData();
 
-        Object.entries(elements).forEach(([id, value]) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = value;
+                // Показуємо повідомлення про збережену відстань
+                if (response.distance_added > 0) {
+                    console.log(`✅ Збережено: ${response.distance_added.toFixed(2)} км`);
+                }
             }
-        });
 
-        const rankEmojis = {
-            bronze: '🥉',
-            silver: '🥈', 
-            gold: '🥇',
-            platinum: '💎',
-            diamond: '👑'
-        };
-
-        const rankElement = document.getElementById('current-rank');
-        if (rankElement) {
-            rankElement.textContent = rankEmojis[this.userStats.currentRank] || '🥉';
+        } catch (error) {
+            console.error('Помилка збереження локації:', error);
         }
     }
 
-    loadRankings() {
-        const leaderboard = document.getElementById('leaderboard');
-        if (!leaderboard) return;
+    async startCompetition(type) {
+        try {
+            // Тут можна створити змагання через API
+            this.activeCompetition = {
+                type: type,
+                startTime: Date.now(),
+                duration: type === 'sprint' ? 30 : 90 // хвилин
+            };
 
-        // Симуляція даних лідерборду
-        const mockLeaders = [
-            { rank: 1, name: 'Олександр М.', points: 1250, level: '🥇' },
-            { rank: 2, name: 'Марія К.', points: 1180, level: '🥈' },
-            { rank: 3, name: 'Іван П.', points: 980, level: '🥉' },
-            { rank: 4, name: 'Анна С.', points: 876, level: '🏃‍♀️' },
-            { rank: 5, name: 'Петро Л.', points: 654, level: '🏃‍♂️' }
-        ];
+            const activeCompElement = document.getElementById('active-competition');
+            const compTypeElement = document.getElementById('comp-type');
+            const compPositionElement = document.getElementById('comp-position');
 
-        leaderboard.innerHTML = mockLeaders.map(leader => `
-            <div class="leader-item">
-                <div class="leader-rank">#${leader.rank}</div>
-                <div class="leader-info">
-                    <div class="leader-name">${leader.name}</div>
-                    <div class="leader-details">${leader.level} Активний гравець</div>
-                </div>
-                <div class="leader-points">${leader.points} очок</div>
-            </div>
-        `).join('');
-    }
+            if (activeCompElement) {
+                activeCompElement.style.display = 'block';
+            }
+            if (compTypeElement) {
+                compTypeElement.textContent = type === 'sprint' ? 'Sprint забіг ⚡' : 'Endurance забіг 🏃‍♂️';
+            }
+            if (compPositionElement) {
+                compPositionElement.textContent = '1-е місце';
+            }
 
-    filterRankings(filter) {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
+            this.startCompetitionTimer();
+            this.showNotification('Змагання розпочато!', `🏆 ${type === 'sprint' ? 'Sprint' : 'Endurance'} забіг активовано!`);
 
-        const activeBtn = document.querySelector(`[data-filter="${filter}"]`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
+        } catch (error) {
+            console.error('Помилка запуску змагання:', error);
+            this.showNotification('Помилка', 'Не вдалося розпочати змагання');
         }
-
-        // Перезавантаження рейтингу з новим фільтром
-        this.loadRankings();
-    }
-
-    loadCompetitions() {
-        // Завантаження активних змагань
-        console.log('🏆 Завантаження списку змагань');
-    }
-
-    startCompetition(type) {
-        this.activeCompetition = {
-            type: type,
-            startTime: Date.now(),
-            duration: type === 'sprint' ? 30 : 90 // хвилин
-        };
-
-        const activeCompElement = document.getElementById('active-competition');
-        const compTypeElement = document.getElementById('comp-type');
-        const compPositionElement = document.getElementById('comp-position');
-
-        if (activeCompElement) {
-            activeCompElement.style.display = 'block';
-        }
-        if (compTypeElement) {
-            compTypeElement.textContent = type === 'sprint' ? 'Sprint забіг ⚡' : 'Endurance забіг 🏃‍♂️';
-        }
-        if (compPositionElement) {
-            compPositionElement.textContent = '1-е місце';
-        }
-
-        this.startCompetitionTimer();
-        this.showNotification('Змагання розпочато!', `🏆 ${type === 'sprint' ? 'Sprint' : 'Endurance'} забіг активовано!`);
     }
 
     startCompetitionTimer() {
@@ -331,12 +420,12 @@ class FitnessApp {
 
     showNotification(title, message) {
         // Використання Telegram haptic feedback
-        if (this.tg.HapticFeedback) {
+        if (this.tg?.HapticFeedback) {
             this.tg.HapticFeedback.notificationOccurred('success');
         }
 
         // Показ повідомлення через Telegram
-        if (this.tg.showPopup) {
+        if (this.tg?.showPopup) {
             this.tg.showPopup({
                 title: title,
                 message: message
@@ -359,12 +448,12 @@ class FitnessApp {
     }
 }
 
-// Ініціалізація додатку після завантаження DOM
+// Ініціалізація додатку
 document.addEventListener('DOMContentLoaded', () => {
     window.fitnessApp = new FitnessApp();
 });
 
-// Глобальні функції для використання в HTML
+// Глобальні функції
 window.startCompetition = (type) => {
     if (window.fitnessApp) {
         window.fitnessApp.startCompetition(type);
