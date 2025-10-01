@@ -1,4 +1,4 @@
-// Оновлений JavaScript для Mini App з API інтеграцією
+// Виправлений JavaScript для Mini App з fallback для desktop
 
 class FitnessApp {
     constructor() {
@@ -10,21 +10,33 @@ class FitnessApp {
             totalDistance: 0,
             totalSteps: 0,
             currentRank: 'bronze',
-            totalPoints: 0
+            totalPoints: 0,
+            rankPosition: 1
         };
         this.apiBase = window.location.origin + '/api';
         this.watchId = null;
+        this.isDesktop = false;
 
         this.init();
     }
 
     init() {
+        // Перевірка чи це десктоп версія
+        this.isDesktop = !navigator.geolocation || 
+                        navigator.platform.includes('Win') ||
+                        navigator.platform.includes('Mac') ||
+                        navigator.platform.includes('Linux');
+
         // Ініціалізація Telegram Mini App
         if (this.tg) {
             this.tg.ready();
             this.tg.expand();
             this.tg.enableClosingConfirmation();
             this.setupTheme();
+
+            console.log('📱 Telegram Mini App ініціалізовано');
+        } else {
+            console.log('💻 Запуск у веб-браузері (тестовий режим)');
         }
 
         // Налаштування обробників подій
@@ -33,7 +45,42 @@ class FitnessApp {
         // Завантаження даних користувача з API
         this.loadUserData();
 
+        // Показуємо повідомлення для десктопу
+        if (this.isDesktop) {
+            this.showDesktopInfo();
+        }
+
         console.log('🚀 Fitness App ініціалізовано з API інтеграцією');
+    }
+
+    showDesktopInfo() {
+        // Показуємо інформацію про обмеження десктопної версії
+        setTimeout(() => {
+            const infoElement = document.createElement('div');
+            infoElement.style.cssText = `
+                position: fixed;
+                top: 60px;
+                left: 20px;
+                right: 20px;
+                background: #ff6b35;
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 1000;
+                text-align: center;
+            `;
+            infoElement.innerHTML = `
+                💻 Десктопна версія: GPS недоступний.<br>
+                📱 Використовуйте Telegram на мобільному для повного функціоналу!
+            `;
+            document.body.appendChild(infoElement);
+
+            // Прибираємо через 5 секунд
+            setTimeout(() => {
+                document.body.removeChild(infoElement);
+            }, 5000);
+        }, 1000);
     }
 
     setupTheme() {
@@ -69,7 +116,7 @@ class FitnessApp {
             }
             return await response.json();
         } catch (error) {
-            console.error(`API request failed: ${error}`);
+            console.error(`❌ API request failed: ${error}`);
             throw error;
         }
     }
@@ -83,13 +130,22 @@ class FitnessApp {
         });
 
         // Кнопки відстеження
-        document.getElementById('start-tracking')?.addEventListener('click', () => {
-            this.startTracking();
-        });
+        const startBtn = document.getElementById('start-tracking');
+        const stopBtn = document.getElementById('stop-tracking');
 
-        document.getElementById('stop-tracking')?.addEventListener('click', () => {
-            this.stopTracking();
-        });
+        if (startBtn) {
+            startBtn.addEventListener('click', () => this.startTracking());
+        }
+        if (stopBtn) {
+            stopBtn.addEventListener('click', () => this.stopTracking());
+        }
+
+        // Якщо десктоп - деактивуємо кнопку GPS
+        if (this.isDesktop && startBtn) {
+            startBtn.textContent = '💻 GPS недоступний на ПК';
+            startBtn.disabled = true;
+            startBtn.style.opacity = '0.5';
+        }
 
         // Фільтри рейтингу
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -118,8 +174,11 @@ class FitnessApp {
             content.classList.remove('active');
         });
 
-        document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
-        document.getElementById(tabName)?.classList.add('active');
+        const tabBtn = document.querySelector(`[data-tab="${tabName}"]`);
+        const tabContent = document.getElementById(tabName);
+
+        if (tabBtn) tabBtn.classList.add('active');
+        if (tabContent) tabContent.classList.add('active');
 
         this.currentTab = tabName;
 
@@ -139,19 +198,34 @@ class FitnessApp {
 
     async loadUserData() {
         try {
+            console.log('📊 Завантаження статистики користувача...');
             const stats = await this.apiRequest('/user/stats');
+
             this.userStats = {
-                totalDistance: stats.total_distance,
-                totalSteps: stats.total_steps,
-                currentRank: stats.rank_level,
-                totalPoints: stats.total_points,
-                rankPosition: stats.rank_position
+                totalDistance: stats.total_distance || 0,
+                totalSteps: stats.total_steps || 0,
+                currentRank: stats.rank_level || 'bronze',
+                totalPoints: stats.total_points || 0,
+                rankPosition: stats.rank_position || 1
             };
 
             this.updateStatsDisplay();
+            console.log('✅ Статистику користувача завантажено:', this.userStats);
+
         } catch (error) {
-            console.error('Помилка завантаження даних користувача:', error);
-            this.showNotification('Помилка', 'Не вдалося завантажити дані користувача');
+            console.error('❌ Помилка завантаження даних користувача:', error);
+
+            // Показуємо дефолтні значення при помилці
+            this.userStats = {
+                totalDistance: 0,
+                totalSteps: 0,
+                currentRank: 'bronze',
+                totalPoints: 0,
+                rankPosition: 1
+            };
+            this.updateStatsDisplay();
+
+            this.showNotification('Увага', 'Не вдалося завантажити дані. Перевірте підключення до інтернету.');
         }
     }
 
@@ -196,7 +270,18 @@ class FitnessApp {
         if (!leaderboard) return;
 
         try {
+            console.log('🏆 Завантаження рейтингу...');
             const rankings = await this.apiRequest('/leaderboard?limit=10');
+
+            if (rankings.length === 0) {
+                leaderboard.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <p>🏆 Рейтинг поки що порожній</p>
+                        <p>Почніть відстежувати активність, щоб з'явитися тут!</p>
+                    </div>
+                `;
+                return;
+            }
 
             leaderboard.innerHTML = rankings.map(leader => `
                 <div class="leader-item">
@@ -209,23 +294,32 @@ class FitnessApp {
                 </div>
             `).join('');
 
+            console.log(`✅ Завантажено ${rankings.length} записів рейтингу`);
+
         } catch (error) {
-            console.error('Помилка завантаження рейтингу:', error);
-            leaderboard.innerHTML = '<p>Помилка завантаження рейтингу</p>';
+            console.error('❌ Помилка завантаження рейтингу:', error);
+            leaderboard.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <p>❌ Помилка завантаження рейтингу</p>
+                    <p>Спробуйте перезавантажити сторінку</p>
+                </div>
+            `;
         }
     }
 
     async loadCompetitions() {
         try {
+            console.log('🏆 Завантаження змагань...');
             const competitions = await this.apiRequest('/competitions');
 
-            // Оновлення інформації про активні змагання
             if (competitions.length > 0) {
-                console.log(`Завантажено ${competitions.length} змагань`);
+                console.log(`✅ Завантажено ${competitions.length} змагань`);
+            } else {
+                console.log('📋 Активних змагань не знайдено');
             }
 
         } catch (error) {
-            console.error('Помилка завантаження змагань:', error);
+            console.error('❌ Помилка завантаження змагань:', error);
         }
     }
 
@@ -252,6 +346,16 @@ class FitnessApp {
             const endpoint = groupId ? `/leaderboard?group_id=${groupId}&limit=10` : '/leaderboard?limit=10';
             const rankings = await this.apiRequest(endpoint);
 
+            if (rankings.length === 0) {
+                leaderboard.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <p>🏆 ${groupId ? 'Груповий рейтинг' : 'Рейтинг'} порожній</p>
+                        <p>Почніть відстежувати активність!</p>
+                    </div>
+                `;
+                return;
+            }
+
             leaderboard.innerHTML = rankings.map(leader => `
                 <div class="leader-item">
                     <div class="leader-rank">#${leader.rank}</div>
@@ -264,14 +368,23 @@ class FitnessApp {
             `).join('');
 
         } catch (error) {
-            console.error('Помилка завантаження рейтингу:', error);
+            console.error('❌ Помилка завантаження рейтингу:', error);
+            leaderboard.innerHTML = '<p>❌ Помилка завантаження</p>';
         }
     }
 
     startTracking() {
+        if (this.isDesktop) {
+            this.showNotification('Увага', 'GPS відстеження недоступне на десктопній версії. Використовуйте мобільний Telegram!');
+            return;
+        }
+
         this.isTracking = true;
-        document.getElementById('start-tracking').disabled = true;
-        document.getElementById('stop-tracking').disabled = false;
+        const startBtn = document.getElementById('start-tracking');
+        const stopBtn = document.getElementById('stop-tracking');
+
+        if (startBtn) startBtn.disabled = true;
+        if (stopBtn) stopBtn.disabled = false;
 
         // Запит дозволу на геолокацію
         if (navigator.geolocation) {
@@ -280,34 +393,58 @@ class FitnessApp {
                     this.handleLocationUpdate(position);
                 },
                 (error) => {
-                    console.error('Помилка геолокації:', error);
-                    this.showNotification('Помилка', 'Не вдалося отримати доступ до геолокації');
+                    console.error('❌ Помилка геолокації:', error);
+                    let errorMessage = 'Не вдалося отримати доступ до геолокації';
+
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = 'Дозвіл на геолокацію відхилено. Увімкніть у налаштуваннях браузера.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = 'Геолокація недоступна.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = 'Тайм-аут запиту геолокації.';
+                            break;
+                    }
+
+                    this.showNotification('Помилка геолокації', errorMessage);
+                    this.stopTracking();
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
+                    timeout: 15000,
+                    maximumAge: 5000
                 }
             );
-        }
 
-        this.showNotification('Відстеження розпочато', '📍 GPS відстеження активовано!');
+            this.showNotification('GPS активовано', '📍 Відстеження розпочато!');
+        } else {
+            this.showNotification('Помилка', 'Ваш браузер не підтримує геолокацію');
+            this.stopTracking();
+        }
     }
 
     stopTracking() {
         this.isTracking = false;
-        document.getElementById('start-tracking').disabled = false;
-        document.getElementById('stop-tracking').disabled = true;
+        const startBtn = document.getElementById('start-tracking');
+        const stopBtn = document.getElementById('stop-tracking');
+
+        if (startBtn && !this.isDesktop) startBtn.disabled = false;
+        if (stopBtn) stopBtn.disabled = true;
 
         if (this.watchId) {
             navigator.geolocation.clearWatch(this.watchId);
+            this.watchId = null;
         }
 
-        this.showNotification('Відстеження зупинено', '⏹️ GPS відстеження деактивовано.');
+        this.showNotification('GPS зупинено', '⏹️ Відстеження деактивовано');
     }
 
     async handleLocationUpdate(position) {
         const { latitude, longitude, speed, accuracy } = position.coords;
+
+        console.log(`📍 GPS оновлення: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}, точність: ${accuracy?.toFixed(0)}м`);
 
         // Оновлення карти
         if (window.updateMapLocation) {
@@ -341,18 +478,17 @@ class FitnessApp {
 
                 // Показуємо повідомлення про збережену відстань
                 if (response.distance_added > 0) {
-                    console.log(`✅ Збережено: ${response.distance_added.toFixed(2)} км`);
+                    console.log(`✅ Збережено: +${response.distance_added} км`);
                 }
             }
 
         } catch (error) {
-            console.error('Помилка збереження локації:', error);
+            console.error('❌ Помилка збереження локації:', error);
         }
     }
 
     async startCompetition(type) {
         try {
-            // Тут можна створити змагання через API
             this.activeCompetition = {
                 type: type,
                 startTime: Date.now(),
@@ -377,7 +513,7 @@ class FitnessApp {
             this.showNotification('Змагання розпочато!', `🏆 ${type === 'sprint' ? 'Sprint' : 'Endurance'} забіг активовано!`);
 
         } catch (error) {
-            console.error('Помилка запуску змагання:', error);
+            console.error('❌ Помилка запуску змагання:', error);
             this.showNotification('Помилка', 'Не вдалося розпочати змагання');
         }
     }
@@ -419,6 +555,8 @@ class FitnessApp {
     }
 
     showNotification(title, message) {
+        console.log(`📢 ${title}: ${message}`);
+
         // Використання Telegram haptic feedback
         if (this.tg?.HapticFeedback) {
             this.tg.HapticFeedback.notificationOccurred('success');
@@ -431,11 +569,17 @@ class FitnessApp {
                 message: message
             });
         } else {
+            // Fallback для веб-браузера
             alert(`${title}: ${message}`);
         }
     }
 
     centerMapOnLocation() {
+        if (this.isDesktop) {
+            this.showNotification('Увага', 'Геолокація недоступна на десктопі');
+            return;
+        }
+
         if (navigator.geolocation && window.mapInstance) {
             navigator.geolocation.getCurrentPosition((position) => {
                 window.mapInstance.setView([position.coords.latitude, position.coords.longitude], 16);
