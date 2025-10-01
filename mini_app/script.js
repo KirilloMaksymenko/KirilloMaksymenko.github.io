@@ -1,4 +1,4 @@
-// Виправлений JavaScript для Mini App з fallback для desktop
+// Виправлений JavaScript з правильною детекцією мобільного
 
 class FitnessApp {
     constructor() {
@@ -15,18 +15,51 @@ class FitnessApp {
         };
         this.apiBase = window.location.origin + '/api';
         this.watchId = null;
-        this.isDesktop = false;
+        this.isMobile = this.detectMobile();
 
         this.init();
     }
 
-    init() {
-        // Перевірка чи це десктоп версія
-        this.isDesktop = !navigator.geolocation || 
-                        navigator.platform.includes('Win') ||
-                        navigator.platform.includes('Mac') ||
-                        navigator.platform.includes('Linux');
+    detectMobile() {
+        // Покращена детекція мобільного пристрою
 
+        // 1. Якщо це Telegram Mini App - то це мобільний
+        if (this.tg && this.tg.platform) {
+            console.log(`📱 Telegram platform: ${this.tg.platform}`);
+            return true; // Telegram Mini App завжди мобільний
+        }
+
+        // 2. Перевірка наявності touch events
+        const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        // 3. Перевірка розміру екрану
+        const smallScreen = window.innerWidth <= 768;
+
+        // 4. Перевірка User Agent на мобільні ключові слова
+        const userAgent = navigator.userAgent.toLowerCase();
+        const mobileKeywords = [
+            'mobile', 'android', 'iphone', 'ipad', 'ipod', 
+            'blackberry', 'windows phone', 'webos'
+        ];
+        const hasMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
+
+        // 5. Перевірка orientation API (є тільки на мобільних)
+        const hasOrientation = 'orientation' in window;
+
+        // Логіка: якщо хоча б 2 з критеріїв true - це мобільний
+        const mobileScore = [hasTouch, smallScreen, hasMobileUA, hasOrientation].filter(Boolean).length;
+        const isMobile = mobileScore >= 2;
+
+        console.log(`🔍 Mobile detection:`, {
+            hasTouch, smallScreen, hasMobileUA, hasOrientation,
+            mobileScore, isMobile,
+            userAgent: userAgent.substring(0, 100)
+        });
+
+        return isMobile;
+    }
+
+    init() {
         // Ініціалізація Telegram Mini App
         if (this.tg) {
             this.tg.ready();
@@ -35,6 +68,11 @@ class FitnessApp {
             this.setupTheme();
 
             console.log('📱 Telegram Mini App ініціалізовано');
+            console.log('📊 Platform info:', {
+                platform: this.tg.platform,
+                version: this.tg.version,
+                isMobile: this.isMobile
+            });
         } else {
             console.log('💻 Запуск у веб-браузері (тестовий режим)');
         }
@@ -45,8 +83,8 @@ class FitnessApp {
         // Завантаження даних користувача з API
         this.loadUserData();
 
-        // Показуємо повідомлення для десктопу
-        if (this.isDesktop) {
+        // Показуємо повідомлення тільки для справжнього десктопу
+        if (!this.isMobile && !this.tg) {
             this.showDesktopInfo();
         }
 
@@ -54,7 +92,7 @@ class FitnessApp {
     }
 
     showDesktopInfo() {
-        // Показуємо інформацію про обмеження десктопної версії
+        // Показуємо інформацію про обмеження десктопної версії (тільки для браузера)
         setTimeout(() => {
             const infoElement = document.createElement('div');
             infoElement.style.cssText = `
@@ -71,14 +109,16 @@ class FitnessApp {
                 text-align: center;
             `;
             infoElement.innerHTML = `
-                💻 Десктопна версія: GPS недоступний.<br>
+                💻 Браузерна версія: GPS може бути недоступний.<br>
                 📱 Використовуйте Telegram на мобільному для повного функціоналу!
             `;
             document.body.appendChild(infoElement);
 
             // Прибираємо через 5 секунд
             setTimeout(() => {
-                document.body.removeChild(infoElement);
+                if (document.body.contains(infoElement)) {
+                    document.body.removeChild(infoElement);
+                }
             }, 5000);
         }, 1000);
     }
@@ -138,13 +178,6 @@ class FitnessApp {
         }
         if (stopBtn) {
             stopBtn.addEventListener('click', () => this.stopTracking());
-        }
-
-        // Якщо десктоп - деактивуємо кнопку GPS
-        if (this.isDesktop && startBtn) {
-            startBtn.textContent = '💻 GPS недоступний на ПК';
-            startBtn.disabled = true;
-            startBtn.style.opacity = '0.5';
         }
 
         // Фільтри рейтингу
@@ -374,8 +407,9 @@ class FitnessApp {
     }
 
     startTracking() {
-        if (this.isDesktop) {
-            this.showNotification('Увага', 'GPS відстеження недоступне на десктопній версії. Використовуйте мобільний Telegram!');
+        // Перевірка доступності геолокації
+        if (!navigator.geolocation) {
+            this.showNotification('Помилка', 'Ваш пристрій не підтримує геолокацію');
             return;
         }
 
@@ -387,42 +421,37 @@ class FitnessApp {
         if (stopBtn) stopBtn.disabled = false;
 
         // Запит дозволу на геолокацію
-        if (navigator.geolocation) {
-            this.watchId = navigator.geolocation.watchPosition(
-                (position) => {
-                    this.handleLocationUpdate(position);
-                },
-                (error) => {
-                    console.error('❌ Помилка геолокації:', error);
-                    let errorMessage = 'Не вдалося отримати доступ до геолокації';
+        this.watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                this.handleLocationUpdate(position);
+            },
+            (error) => {
+                console.error('❌ Помилка геолокації:', error);
+                let errorMessage = 'Не вдалося отримати доступ до геолокації';
 
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage = 'Дозвіл на геолокацію відхилено. Увімкніть у налаштуваннях браузера.';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage = 'Геолокація недоступна.';
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage = 'Тайм-аут запиту геолокації.';
-                            break;
-                    }
-
-                    this.showNotification('Помилка геолокації', errorMessage);
-                    this.stopTracking();
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 15000,
-                    maximumAge: 5000
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'Дозвіл на геолокацію відхилено. Увімкніть у налаштуваннях.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Геолокація недоступна на цьому пристрої.';
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage = 'Тайм-аут запиту геолокації.';
+                        break;
                 }
-            );
 
-            this.showNotification('GPS активовано', '📍 Відстеження розпочато!');
-        } else {
-            this.showNotification('Помилка', 'Ваш браузер не підтримує геолокацію');
-            this.stopTracking();
-        }
+                this.showNotification('Помилка геолокації', errorMessage);
+                this.stopTracking();
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 5000
+            }
+        );
+
+        this.showNotification('GPS активовано', '📍 Відстеження розпочато!');
     }
 
     stopTracking() {
@@ -430,7 +459,7 @@ class FitnessApp {
         const startBtn = document.getElementById('start-tracking');
         const stopBtn = document.getElementById('stop-tracking');
 
-        if (startBtn && !this.isDesktop) startBtn.disabled = false;
+        if (startBtn) startBtn.disabled = false;
         if (stopBtn) stopBtn.disabled = true;
 
         if (this.watchId) {
@@ -575,12 +604,12 @@ class FitnessApp {
     }
 
     centerMapOnLocation() {
-        if (this.isDesktop) {
-            this.showNotification('Увага', 'Геолокація недоступна на десктопі');
+        if (!navigator.geolocation) {
+            this.showNotification('Увага', 'Геолокація недоступна на цьому пристрої');
             return;
         }
 
-        if (navigator.geolocation && window.mapInstance) {
+        if (window.mapInstance) {
             navigator.geolocation.getCurrentPosition((position) => {
                 window.mapInstance.setView([position.coords.latitude, position.coords.longitude], 16);
             });
